@@ -1,6 +1,6 @@
 ﻿using Entities.Abstract;
 
-namespace Entities.Concrete
+namespace Entities.Dtos
 {
     public class UserLoginDto : IDto
     {
