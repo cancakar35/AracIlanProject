@@ -24,7 +24,7 @@ namespace Core.DataAccess.EntityFramework
         {
             using (TContext context = new TContext())
             {
-                context.Set<TEntity>().Remove(entity);
+                context.Set<TEntity>().Entry(entity).State = EntityState.Deleted;
                 await context.SaveChangesAsync();
             }
         }
@@ -33,8 +33,7 @@ namespace Core.DataAccess.EntityFramework
         {
             using (TContext context = new TContext())
             {
-                IQueryable<TEntity> query = context.Set<TEntity>().Where(expr);
-                return await query.FirstOrDefaultAsync();
+                return await context.Set<TEntity>().SingleOrDefaultAsync(expr);
             }
         }
 
@@ -42,12 +41,9 @@ namespace Core.DataAccess.EntityFramework
         {
             using (TContext context = new TContext())
             {
-                IQueryable<TEntity> query = context.Set<TEntity>();
-                if (expr != null)
-                {
-                    query = query.Where(expr.Compile()).AsQueryable();
-                }
-                return await query.ToListAsync();
+                return expr == null 
+                    ? await context.Set<TEntity>().ToListAsync()
+                    : await context.Set<TEntity>().Where(expr).ToListAsync();
             }
         }
 
@@ -55,7 +51,7 @@ namespace Core.DataAccess.EntityFramework
         {
             using (TContext context = new TContext())
             {
-                context.Set<TEntity>().Update(entity);
+                context.Set<TEntity>().Entry(entity).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
         }

@@ -9,9 +9,9 @@ namespace Business.Abstract
 {
     public interface IUserService
     {
-        void Add(User user);
-        void Update(User user);
-        void Delete(User user);
+        Task Add(User user);
+        Task Update(User user);
+        Task Delete(User user);
         Task<User?> GetByMail(string mail);
         Task<List<OperationClaim>> GetClaims(User user);
     }

@@ -22,8 +22,6 @@ namespace DataAccess.Concrete.EntityFramework
         DbSet<KasaTipi> KasaTipleri { get; set; }
         DbSet<Kategori> Kategoriler { get; set; }
         DbSet<Marka> Markalar { get; set; }
-        DbSet<Motosiklet> Motosikletler { get; set; }
-        DbSet<Otomobil> Otomobiller { get; set; }
         DbSet<Renk> Renkler { get; set; }
         DbSet<VitesTipi> VitesTipleri { get; set; }
         DbSet<YakitTipi> YakitTipleri { get; set; }

@@ -1,18 +1,18 @@
-﻿using Core.Entities.Abstract;
+﻿using Entities.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Concrete
+namespace Entities.Dtos
 {
-    public class Ilan : IEntity
+    public class IlanDto : IDto
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int AracId { get; set; }
-        public string? TelefonNo { get; set; }
+        public AracDto? AracBilgi { get; set; }
+        public string Ad { get; set; }
+        public string Soyad { get; set; }
+        public string TelefonNo { get; set; }
         public string? Aciklama { get; set; }
         public DateTime? Tarih { get; set; }
         public string? Il { get; set; }

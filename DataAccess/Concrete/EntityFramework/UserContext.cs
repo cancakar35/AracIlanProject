@@ -15,6 +15,13 @@ namespace DataAccess.Concrete.EntityFramework
             optionsBuilder.UseSqlServer(@"Server=CAN-DESKTOP;Database=CarDB;Trusted_Connection=true;encrypt=false;");
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .Property(x => x.CreatedAt)
+                .HasDefaultValueSql("GETDATE()");
+        }
+
         DbSet<User> Users { get; set; }
         DbSet<OperationClaim> OperationClaims { get; set; }
         DbSet<UserOperationClaim> UserOperationClaims { get; set; }

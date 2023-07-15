@@ -18,14 +18,14 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-        public void Add(User user)
+        public async Task Add(User user)
         {
-            _userDal.Add(user);
+            await _userDal.Add(user);
         }
 
-        public void Delete(User user)
+        public async Task Delete(User user)
         {
-            _userDal.Delete(user);
+            await _userDal.Delete(user);
         }
 
         public async Task<User?> GetByMail(string mail)
@@ -38,9 +38,9 @@ namespace Business.Concrete
             return await _userDal.GetClaims(user);
         }
 
-        public void Update(User user)
+        public async Task Update(User user)
         {
-            _userDal.Update(user);
+            await _userDal.Update(user);
         }
     }
 }

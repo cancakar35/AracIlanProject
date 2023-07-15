@@ -24,12 +24,12 @@ namespace Business.Concrete
             _tokenHelper = tokenHelper;
 
         }
-        public IDataResult<AccessToken> CreateAccessToken(User user)
+        public async Task<IDataResult<AccessToken>> CreateAccessToken(User user)
         {
             try
             {
-                var claims = _userService.GetClaims(user);
-                return new SuccessDataResult<AccessToken>(_tokenHelper.CreateToken(user, claims.Result));
+                var claims = await _userService.GetClaims(user);
+                return new SuccessDataResult<AccessToken>(_tokenHelper.CreateToken(user, claims));
             }
             catch
             {
@@ -37,9 +37,9 @@ namespace Business.Concrete
             }
         }
 
-        public IDataResult<User> Login(UserLoginDto userLoginDto)
+        public async Task<IDataResult<User>> Login(UserLoginDto userLoginDto)
         {
-            User? userToLogin = _userService.GetByMail(userLoginDto.Email).Result;
+            User? userToLogin = await _userService.GetByMail(userLoginDto.Email);
             if (userToLogin == null)
             {
                 return new ErrorDataResult<User>(Messages.KullaniciHataliGiris);
@@ -51,7 +51,7 @@ namespace Business.Concrete
             return new ErrorDataResult<User>(Messages.KullaniciHataliGiris);
         }
 
-        public IDataResult<User> Register(UserRegisterDto userRegisterDto)
+        public async Task<IDataResult<User>> Register(UserRegisterDto userRegisterDto)
         {
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(userRegisterDto.Password, out passwordHash, out passwordSalt);
@@ -66,7 +66,7 @@ namespace Business.Concrete
             };
             try
             {
-                _userService.Add(user);
+                await _userService.Add(user);
                 return new SuccessDataResult<User>(user);
             }
             catch (Exception ex)
@@ -75,9 +75,9 @@ namespace Business.Concrete
             }
         }
 
-        public IResult UserExist(string email)
+        public async Task<IResult> UserExist(string email)
         {
-            if(_userService.GetByMail(email).Result != null)
+            if(await _userService.GetByMail(email) != null)
             {
                 return new ErrorResult(Messages.KullaniciMevcut);
             }

@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,37 +18,40 @@ namespace AracIlanProject.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult Login(UserLoginDto userLoginDto)
+        public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {
-            var result = _authService.Login(userLoginDto);
+            var userToLogin = await _authService.Login(userLoginDto);
+            if (!userToLogin.Success)
+            {
+                return BadRequest(userToLogin.Message);
+            }
+            var result = await _authService.CreateAccessToken(userToLogin.Data);
             if (result.Success)
             {
-                try
-                {
-                    return Ok(_authService.CreateAccessToken(result.Data));
-                }
-                catch
-                {
-                    return StatusCode(500);
-                }
+                return Ok(result.Data);
             }
             return BadRequest(result.Message);
         }
 
         [HttpPost("register")]
-        public ActionResult Register(UserRegisterDto userRegisterDto)
+        public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
         {
-            var checkUserExist = _authService.UserExist(userRegisterDto.Email);
+            var checkUserExist = await _authService.UserExist(userRegisterDto.Email);
             if (!checkUserExist.Success)
             {
                 return BadRequest("Bu email kullanılamaz!");
             }
-            var registerResult = _authService.Register(userRegisterDto);
+            var registerResult = await _authService.Register(userRegisterDto);
             if (!registerResult.Success)
             {
                 return BadRequest("Kayıt başarısız!");
             }
-            return Ok(_authService.CreateAccessToken(registerResult.Data));
+            var result = await _authService.CreateAccessToken(registerResult.Data);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
         }
     }
 }
