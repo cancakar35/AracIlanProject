@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCekisDal : EfEntityRepositoryBase<Cekis, AracContext>, ICekisDal
+    public class EfCekisTipiDal : EfEntityRepositoryBase<CekisTipleri, AracContext>, ICekisTipiDal
     {
     }
 }

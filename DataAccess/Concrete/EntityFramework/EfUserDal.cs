@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfUserDal : EfEntityRepositoryBase<User, UserContext>, IUserDal
+    public class EfUserDal : EfEntityRepositoryBase<User, AracContext>, IUserDal
     {
         public async Task<List<OperationClaim>> GetClaims(User user)
         {
-            using (UserContext context = new UserContext())
+            using (AracContext context = new AracContext())
             {
                 var result = from operationClaim in context.Set<OperationClaim>()
                              join userOperationClaim in context.Set<UserOperationClaim>()
