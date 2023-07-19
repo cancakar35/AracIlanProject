@@ -21,6 +21,10 @@ builder.Services.AddScoped<IUserDal, EfUserDal>();
 builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<IAuthService, AuthManager>();
 builder.Services.AddSingleton<ITokenHelper, JwtHelper>();
+builder.Services.AddScoped<IAracDal, EfAracDal>();
+builder.Services.AddScoped<IAracIlanDal, EfAracIlanDal>();
+builder.Services.AddScoped<IAracService, AracManager>();
+builder.Services.AddScoped<IAracIlanService, AracIlanManager>();
 
 TokenOptions tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

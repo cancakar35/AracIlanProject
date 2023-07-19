@@ -24,5 +24,6 @@ namespace Entities.Concrete
         public int? CekisTipiId { get; set; }
         public int? KasaTipiId { get; set; }
         public bool Sifir { get; set; }
+        public decimal Fiyat { get; set; }
     }
 }

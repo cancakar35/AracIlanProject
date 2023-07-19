@@ -50,6 +50,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  CekisTipi = cekisTipi.Name,
                                  KasaTipi = kasaTipi.Name,
                                  Sifir = arac.Sifir,
+                                 Fiyat = arac.Fiyat
                              };
                 return await result.ToListAsync();
             }
@@ -91,6 +92,7 @@ namespace DataAccess.Concrete.EntityFramework
                                         CekisTipi = cekisTipi.Name,
                                         KasaTipi = kasaTipi.Name,
                                         Sifir = arac.Sifir,
+                                        Fiyat = arac.Fiyat
                                     }).SingleOrDefaultAsync();
                 return result;
             }

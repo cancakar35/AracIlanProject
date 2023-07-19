@@ -23,5 +23,6 @@ namespace Entities.Dtos
         public string? CekisTipi { get; set; }
         public string? KasaTipi { get; set; }
         public bool Sifir { get; set; }
+        public decimal Fiyat { get; set; }
     }
 }

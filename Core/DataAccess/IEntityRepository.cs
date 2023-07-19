@@ -10,7 +10,7 @@ namespace Core.DataAccess
 {
     public interface IEntityRepository<T> where T : class, IEntity, new()
     {
-        Task<List<T>> GetAll(Expression<Func<T,bool>>? expr);
+        Task<List<T>> GetAll(Expression<Func<T,bool>>? expr=null);
         Task<T?> Get(Expression<Func<T, bool>> expr);
         Task Add(T entity);
         Task Update(T entity);

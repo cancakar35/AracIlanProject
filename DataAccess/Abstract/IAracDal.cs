@@ -12,7 +12,7 @@ namespace DataAccess.Abstract
 {
     public interface IAracDal : IEntityRepository<Arac>
     {
-        Task<List<AracDto>> GetAllAracDetails(Expression<Func<Arac, bool>>? expr);
+        Task<List<AracDto>> GetAllAracDetails(Expression<Func<Arac, bool>>? expr=null);
         Task<AracDto?> GetAracDetails(int id);
     }
 }

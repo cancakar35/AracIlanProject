@@ -24,6 +24,7 @@ namespace DataAccess.Concrete.EntityFramework
                 IQueryable<IlanDto> result = from ilan in ilanlar
                              join user in context.Set<User>()
                              on ilan.UserId equals user.Id
+                             where ilan.IsActive == true
                              select new IlanDto
                              {
                                  Ad = user.FirstName,
@@ -46,7 +47,7 @@ namespace DataAccess.Concrete.EntityFramework
                 var result = await (from ilan in context.Set<Ilan>()
                              join user in context.Set<User>()
                              on ilan.UserId equals user.Id
-                             where ilan.Id == id
+                             where ilan.Id == id && ilan.IsActive == true
                              select new IlanDto
                              {
                                  Ad = user.FirstName,
