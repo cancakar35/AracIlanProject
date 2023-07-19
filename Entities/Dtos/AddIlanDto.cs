@@ -9,7 +9,7 @@ namespace Entities.Dtos
 {
     public class AddIlanDto : IDto
     {
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public string TelefonNo { get; set; }
         public string? Aciklama { get; set; }
         public string Il { get; set; }

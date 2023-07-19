@@ -11,8 +11,8 @@ namespace Business.Abstract
 {
     public interface IAracIlanService
     {
-        Task<IDataResult<Ilan>> Add(AddIlanDto addIlanDto);
-        Task<IDataResult<Ilan>> Update(int id, AddIlanDto addIlanDto);
+        Task<IResult> Add(AddIlanDto addIlanDto, Arac arac);
+        Task<IResult> Update(int id, AddIlanDto addIlanDto);
         Task<IResult> Remove(int id);
         Task<IDataResult<IlanDto>> GetIlanDetailById(int id);
         Task<IDataResult<List<IlanDto>>> GetAllIlanDetails();

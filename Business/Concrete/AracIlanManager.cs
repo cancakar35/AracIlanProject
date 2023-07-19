@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
 using System;
@@ -7,34 +9,98 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Business.Concrete
 {
     public class AracIlanManager : IAracIlanService
     {
-        public Task<IDataResult<Ilan>> Add(AddIlanDto addIlanDto)
+        private IAracIlanDal _aracIlanDal;
+        private IAracService _aracService;
+
+        public AracIlanManager(IAracIlanDal aracIlanDal, IAracService aracService)
         {
-            throw new NotImplementedException();
+            _aracIlanDal = aracIlanDal;
+            _aracService = aracService;
+        }
+        public async Task<IResult> Add(AddIlanDto addIlanDto, Arac arac)
+        {
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew))
+            {
+                try
+                {
+                    await _aracService.Add(arac);
+                    Ilan newIlan = new Ilan
+                    {
+                        UserId = addIlanDto.UserId,
+                        AracId = arac.Id,
+                        TelefonNo = addIlanDto.TelefonNo,
+                        Aciklama = addIlanDto.Aciklama,
+                        Tarih = DateTime.Now,
+                        Il = addIlanDto.Il,
+                        Ilce = addIlanDto.Ilce,
+                        Mahalle = addIlanDto.Mahalle,
+                        IsActive = true
+                    };
+                    await _aracIlanDal.Add(newIlan);
+                    scope.Complete();
+                }
+                catch {
+                    scope.Dispose();
+                    return new ErrorResult(Messages.IlanEklemeBasarisiz);
+                }
+            }
+            return new SuccessResult();
         }
 
-        public Task<IDataResult<List<IlanDto>>> GetAllIlanDetails()
+        public async Task<IDataResult<List<IlanDto>>> GetAllIlanDetails()
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<IlanDto>>(await _aracIlanDal.GetAllIlanDetails());
         }
 
-        public Task<IDataResult<IlanDto>> GetIlanDetailById(int id)
+        public async Task<IDataResult<IlanDto>> GetIlanDetailById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IlanDto? ilan = await _aracIlanDal.GetIlanDetailById(id);
+                if (ilan == null)
+                {
+                    return new ErrorDataResult<IlanDto>(Messages.IlanBulunamadi);
+                }
+                return new SuccessDataResult<IlanDto>(ilan);
+            }
+            catch
+            {
+                return new ErrorDataResult<IlanDto>("Hata oluştu");
+            }
         }
 
-        public Task<IResult> Remove(int id)
+        public async Task<IResult> Remove(int id)
         {
-            throw new NotImplementedException();
+            Ilan? ilan = await _aracIlanDal.Get(x => x.Id == id);
+            if (ilan == null)
+            {
+                return new ErrorResult(Messages.IlanBulunamadi);
+            }
+            ilan.IsActive = false;
+            await _aracIlanDal.Update(ilan);
+            return new SuccessResult();
         }
 
-        public Task<IDataResult<Ilan>> Update(int id, AddIlanDto addIlanDto)
+        public async Task<IResult> Update(int id, AddIlanDto addIlanDto)
         {
-            throw new NotImplementedException();
+            Ilan? ilan = await _aracIlanDal.Get(x => x.Id == id);
+            if (ilan == null)
+            {
+                return new ErrorResult(Messages.IlanBulunamadi);
+            }
+            ilan.TelefonNo = addIlanDto.TelefonNo;
+            ilan.Aciklama = addIlanDto.Aciklama;
+            ilan.Il = addIlanDto.Il;
+            ilan.Ilce = addIlanDto.Ilce;
+            ilan.Mahalle = addIlanDto.Mahalle;
+            await _aracIlanDal.Update(ilan);
+            return new SuccessResult();
         }
     }
 }

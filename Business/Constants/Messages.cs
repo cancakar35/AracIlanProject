@@ -14,5 +14,7 @@ namespace Business.Constants
         public static string AracEklemeBasarisiz = "Araç ekleme başarısız oldu!";
         public static string GuncellemeBasarisiz = "Güncelleme başarısız oldu!";
         public static string AracBulunamadi = "Araç bulunamadı!";
+        public static string IlanEklemeBasarisiz = "Ilan ekleme başarısız oldu!";
+        public static string IlanBulunamadi = "İlan bulunamadı!";
     }
 }
