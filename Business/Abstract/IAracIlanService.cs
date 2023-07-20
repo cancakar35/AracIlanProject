@@ -15,7 +15,7 @@ namespace Business.Abstract
         Task<IResult> Add(AddIlanDto addIlanDto, Arac arac, int userId);
         Task<IResult> Update(int id, AddIlanDto addIlanDto, int userId);
         Task<IResult> Remove(int id, int userId);
-        Task<IDataResult<IlanDto>> GetIlanDetailById(int id);
-        Task<IDataResult<List<IlanDto>>> GetAllIlanDetails();
+        Task<IDataResult<AracIlanDto>> GetIlanDetailById(int id);
+        Task<IDataResult<List<AracIlanDto>>> GetAllIlanDetails();
     }
 }

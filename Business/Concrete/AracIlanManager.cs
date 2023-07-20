@@ -54,25 +54,25 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public async Task<IDataResult<List<IlanDto>>> GetAllIlanDetails()
+        public async Task<IDataResult<List<AracIlanDto>>> GetAllIlanDetails()
         {
-            return new SuccessDataResult<List<IlanDto>>(await _aracIlanDal.GetAllIlanDetails());
+            return new SuccessDataResult<List<AracIlanDto>>(await _aracIlanDal.GetAllIlanDetails());
         }
 
-        public async Task<IDataResult<IlanDto>> GetIlanDetailById(int id)
+        public async Task<IDataResult<AracIlanDto>> GetIlanDetailById(int id)
         {
             try
             {
-                IlanDto? ilan = await _aracIlanDal.GetIlanDetailById(id);
+                AracIlanDto? ilan = await _aracIlanDal.GetIlanDetailById(id);
                 if (ilan == null)
                 {
-                    return new ErrorDataResult<IlanDto>(Messages.IlanBulunamadi);
+                    return new ErrorDataResult<AracIlanDto>(Messages.IlanBulunamadi);
                 }
-                return new SuccessDataResult<IlanDto>(ilan);
+                return new SuccessDataResult<AracIlanDto>(ilan);
             }
             catch
             {
-                return new ErrorDataResult<IlanDto>("Hata oluştu");
+                return new ErrorDataResult<AracIlanDto>("Hata oluştu");
             }
         }
 
