@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -23,16 +24,16 @@ namespace Business.Concrete
             _aracIlanDal = aracIlanDal;
             _aracService = aracService;
         }
-        public async Task<IResult> Add(AddIlanDto addIlanDto, Arac arac)
+        public async Task<IResult> Add(AddIlanDto addIlanDto, Arac arac, int userId)
         {
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew))
+            using (TransactionScope scope = new TransactionScope())
             {
                 try
                 {
                     await _aracService.Add(arac);
                     Ilan newIlan = new Ilan
                     {
-                        UserId = addIlanDto.UserId,
+                        UserId = userId,
                         AracId = arac.Id,
                         TelefonNo = addIlanDto.TelefonNo,
                         Aciklama = addIlanDto.Aciklama,
@@ -75,24 +76,32 @@ namespace Business.Concrete
             }
         }
 
-        public async Task<IResult> Remove(int id)
+        public async Task<IResult> Remove(int id, int userId)
         {
             Ilan? ilan = await _aracIlanDal.Get(x => x.Id == id);
             if (ilan == null)
             {
                 return new ErrorResult(Messages.IlanBulunamadi);
             }
+            if (ilan.UserId != userId)
+            {
+                return new ErrorResult("Bu işlem için yetkiniz yok!");
+            }
             ilan.IsActive = false;
             await _aracIlanDal.Update(ilan);
             return new SuccessResult();
         }
 
-        public async Task<IResult> Update(int id, AddIlanDto addIlanDto)
+        public async Task<IResult> Update(int id, AddIlanDto addIlanDto, int userId)
         {
             Ilan? ilan = await _aracIlanDal.Get(x => x.Id == id);
             if (ilan == null)
             {
                 return new ErrorResult(Messages.IlanBulunamadi);
+            }
+            if (ilan.UserId != userId)
+            {
+                return new ErrorResult("Bu işlem için yetkiniz yok!");
             }
             ilan.TelefonNo = addIlanDto.TelefonNo;
             ilan.Aciklama = addIlanDto.Aciklama;
