@@ -36,7 +36,7 @@ namespace DataAccess.Concrete.EntityFramework
                              on arac.VitesTipiId equals vitesTipi.Id
                              join yakitTipi in context.Set<YakitTipi>()
                              on arac.YakitTipiId equals yakitTipi.Id
-                             join cekisTipi in context.Set<CekisTipleri>()
+                             join cekisTipi in context.Set<CekisTipi>()
                              on arac.CekisTipiId equals cekisTipi.Id
                              join kasaTipi in context.Set<KasaTipi>()
                              on arac.KasaTipiId equals kasaTipi.Id
@@ -96,7 +96,7 @@ namespace DataAccess.Concrete.EntityFramework
                              on arac.VitesTipiId equals vitesTipi.Id
                              join yakitTipi in context.Set<YakitTipi>()
                              on arac.YakitTipiId equals yakitTipi.Id
-                             join cekisTipi in context.Set<CekisTipleri>()
+                             join cekisTipi in context.Set<CekisTipi>()
                              on arac.CekisTipiId equals cekisTipi.Id
                              join kasaTipi in context.Set<KasaTipi>()
                              on arac.KasaTipiId equals kasaTipi.Id

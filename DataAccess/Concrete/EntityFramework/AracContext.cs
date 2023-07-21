@@ -28,7 +28,7 @@ namespace DataAccess.Concrete.EntityFramework
         DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         DbSet<Arac> Araclar { get; set; }
         DbSet<AracResim> AracResimleri { get; set;}
-        DbSet<CekisTipleri> CekisTipleri { get; set; }
+        DbSet<CekisTipi> CekisTipleri { get; set; }
         DbSet<Ilan> Ilanlar { get; set; }
         DbSet<KasaTipi> KasaTipleri { get; set; }
         DbSet<Kategori> Kategoriler { get; set; }

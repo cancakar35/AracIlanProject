@@ -1,9 +1,12 @@
 using Business.Abstract;
 using Business.Concrete;
+using Core.DataAccess;
+using Core.DataAccess.EntityFramework;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -25,6 +28,16 @@ builder.Services.AddScoped<IAracDal, EfAracDal>();
 builder.Services.AddScoped<IAracIlanDal, EfAracIlanDal>();
 builder.Services.AddScoped<IAracService, AracManager>();
 builder.Services.AddScoped<IAracIlanService, AracIlanManager>();
+builder.Services.AddScoped<IRenkDal, EfRenkDal>();
+builder.Services.AddScoped<IKasaTipiDal, EfKasaTipiDal>();
+builder.Services.AddScoped<ICekisTipiDal, EfCekisTipiDal>();
+builder.Services.AddScoped<IYakitTipiDal, EfYakitTipiDal>();
+builder.Services.AddScoped<IVitesTipiDal, EfVitesTipiDal>();
+builder.Services.AddScoped<IOzellikService<Renk>, RenkService>();
+builder.Services.AddScoped<IOzellikService<VitesTipi>, VitesTipiService>();
+builder.Services.AddScoped<IOzellikService<KasaTipi>, KasaTipiService>();
+builder.Services.AddScoped<IOzellikService<YakitTipi>, YakitTipiService>();
+builder.Services.AddScoped<IOzellikService<CekisTipi>, CekisTipiService>();
 
 TokenOptions tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

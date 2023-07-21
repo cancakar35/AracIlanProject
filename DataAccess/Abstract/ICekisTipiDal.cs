@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface ICekisTipiDal : IEntityRepository<CekisTipleri>
+    public interface ICekisTipiDal : IEntityRepository<CekisTipi>
     {
     }
 }
