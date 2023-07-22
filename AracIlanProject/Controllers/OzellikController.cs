@@ -1,11 +1,13 @@
 ﻿using Business.Abstract;
 using Entities.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AracIlanProject.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OzellikController<TOzellik> : ControllerBase
@@ -18,6 +20,7 @@ namespace AracIlanProject.Controllers
             _ozellikService = ozellikService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -29,6 +32,7 @@ namespace AracIlanProject.Controllers
             return Ok(result.Data);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {

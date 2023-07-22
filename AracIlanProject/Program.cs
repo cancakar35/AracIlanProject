@@ -26,18 +26,22 @@ builder.Services.AddScoped<IAuthService, AuthManager>();
 builder.Services.AddSingleton<ITokenHelper, JwtHelper>();
 builder.Services.AddScoped<IAracDal, EfAracDal>();
 builder.Services.AddScoped<IAracIlanDal, EfAracIlanDal>();
-builder.Services.AddScoped<IAracService, AracManager>();
-builder.Services.AddScoped<IAracIlanService, AracIlanManager>();
 builder.Services.AddScoped<IRenkDal, EfRenkDal>();
+builder.Services.AddScoped<IMarkaDal, EfMarkaDal>();
+builder.Services.AddScoped<IKategoriDal, EfKategoriDal>();
 builder.Services.AddScoped<IKasaTipiDal, EfKasaTipiDal>();
 builder.Services.AddScoped<ICekisTipiDal, EfCekisTipiDal>();
 builder.Services.AddScoped<IYakitTipiDal, EfYakitTipiDal>();
 builder.Services.AddScoped<IVitesTipiDal, EfVitesTipiDal>();
+builder.Services.AddScoped<IAracService, AracManager>();
+builder.Services.AddScoped<IAracIlanService, AracIlanManager>();
 builder.Services.AddScoped<IOzellikService<Renk>, RenkService>();
 builder.Services.AddScoped<IOzellikService<VitesTipi>, VitesTipiService>();
 builder.Services.AddScoped<IOzellikService<KasaTipi>, KasaTipiService>();
 builder.Services.AddScoped<IOzellikService<YakitTipi>, YakitTipiService>();
 builder.Services.AddScoped<IOzellikService<CekisTipi>, CekisTipiService>();
+builder.Services.AddScoped<IKategoriService, KategoriManager>();
+builder.Services.AddScoped<IMarkaService, MarkaManager>();
 
 TokenOptions tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
