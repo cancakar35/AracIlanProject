@@ -17,6 +17,7 @@ namespace AracIlanProject.Controllers
             _kategoriService = kategoriService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -28,6 +29,7 @@ namespace AracIlanProject.Controllers
             return Ok(result.Data);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {

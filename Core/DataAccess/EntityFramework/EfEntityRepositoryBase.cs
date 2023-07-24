@@ -11,13 +11,14 @@ namespace Core.DataAccess.EntityFramework
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
-        public async Task Add(TEntity entity)
+        public async Task<TEntity?> Add(TEntity entity)
         {
             using (TContext context = new TContext())
             {
                 await context.Set<TEntity>().AddAsync(entity);
                 await context.SaveChangesAsync();
             }
+            return entity;
         }
 
         public async Task Delete(TEntity entity)
@@ -47,13 +48,14 @@ namespace Core.DataAccess.EntityFramework
             }
         }
 
-        public async Task Update(TEntity entity)
+        public async Task<TEntity?> Update(TEntity entity)
         {
             using (TContext context = new TContext())
             {
                 context.Set<TEntity>().Entry(entity).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
+            return entity;
         }
     }
 }

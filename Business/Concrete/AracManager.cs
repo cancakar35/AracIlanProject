@@ -17,16 +17,20 @@ namespace Business.Concrete
         {
             _aracDal = aracDal;
         }
-        public async Task<IResult> Add(Arac arac)
+        public async Task<IDataResult<Arac>> Add(Arac arac)
         {
             try
             {
-                await _aracDal.Add(arac);
-                return new SuccessResult();
+                Arac? addArac = await _aracDal.Add(arac);
+                if (addArac == null)
+                {
+                    return new ErrorDataResult<Arac>("Hata oluştu!");
+                }
+                return new SuccessDataResult<Arac>(addArac);
             }
             catch
             {
-                return new ErrorResult(Messages.AracEklemeBasarisiz);
+                return new ErrorDataResult<Arac>(Messages.AracEklemeBasarisiz);
             }
         }
 
@@ -45,16 +49,21 @@ namespace Business.Concrete
             return new SuccessDataResult<AracDto>(arac);
         }
 
-        public async Task<IResult> Update(Arac arac)
+        public async Task<IDataResult<Arac>> Update(Arac arac)
         {
             try
             {
+                Arac? updateArac = await _aracDal.Update(arac);
+                if (updateArac == null)
+                {
+                    return new ErrorDataResult<Arac>("Hata oluştu!");
+                }
                 await _aracDal.Update(arac);
-                return new SuccessResult();
+                return new SuccessDataResult<Arac>(updateArac);
             }
             catch
             {
-                return new ErrorResult(Messages.GuncellemeBasarisiz);
+                return new ErrorDataResult<Arac>(Messages.GuncellemeBasarisiz);
             }
         }
     }

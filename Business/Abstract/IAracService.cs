@@ -11,8 +11,8 @@ namespace Business.Abstract
 {
     public interface IAracService
     {
-        Task<IResult> Add(Arac arac);
-        Task<IResult> Update(Arac arac);
+        Task<IDataResult<Arac>> Add(Arac arac);
+        Task<IDataResult<Arac>> Update(Arac arac);
         Task<IDataResult<List<AracDto>>> GetAllDetailed();
         Task<IDataResult<AracDto>> GetAracDetailById(int id);
     }

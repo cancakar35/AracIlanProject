@@ -12,8 +12,8 @@ namespace Core.DataAccess
     {
         Task<List<T>> GetAll(Expression<Func<T,bool>>? expr=null);
         Task<T?> Get(Expression<Func<T, bool>> expr);
-        Task Add(T entity);
-        Task Update(T entity);
+        Task<T?> Add(T entity);
+        Task<T?> Update(T entity);
         Task Delete(T entity);
     }
 }

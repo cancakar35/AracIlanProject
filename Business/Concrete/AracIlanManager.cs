@@ -5,6 +5,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,19 +19,27 @@ namespace Business.Concrete
     {
         private IAracIlanDal _aracIlanDal;
         private IAracService _aracService;
+        private IAracResimService _aracResimService;
 
-        public AracIlanManager(IAracIlanDal aracIlanDal, IAracService aracService)
+        public AracIlanManager(IAracIlanDal aracIlanDal, IAracService aracService,
+            IAracResimService aracResimService)
         {
             _aracIlanDal = aracIlanDal;
             _aracService = aracService;
+            _aracResimService = aracResimService;
         }
-        public async Task<IResult> Add(AddIlanDto addIlanDto, Arac arac, int userId)
+        public async Task<IResult> Add(AddIlanDto addIlanDto, Arac arac, IFormFileCollection fileCollection, int userId)
         {
             using (TransactionScope scope = new TransactionScope())
             {
                 try
                 {
-                    await _aracService.Add(arac);
+                    var aracResult = await _aracService.Add(arac);
+                    if (!aracResult.Success)
+                    {
+                        throw new Exception();
+                    }
+                    await _aracResimService.Add(fileCollection, aracResult.Data.Id);
                     Ilan newIlan = new Ilan
                     {
                         UserId = userId,

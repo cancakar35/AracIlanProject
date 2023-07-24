@@ -47,7 +47,7 @@ namespace AracIlanProject.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Add([FromForm] AddIlanDto addIlanDto, [FromForm] Arac arac)
+        public async Task<IActionResult> Add([FromForm] AddIlanDto addIlanDto, [FromForm] Arac arac, [FromForm] IFormFileCollection files)
         {
             if (addIlanDto == null || arac == null) {
                 return BadRequest();
@@ -56,7 +56,7 @@ namespace AracIlanProject.Controllers
             if (int.TryParse(User.Claims.First(i => i.Type == "UserId").Value, out userId) == false){
                 return StatusCode(403);
             }
-            var result = await _ilanService.Add(addIlanDto, arac, userId);
+            var result = await _ilanService.Add(addIlanDto, arac, files, userId);
             if (result.Success)
             {
                 return Ok();

@@ -2,6 +2,7 @@ using Business.Abstract;
 using Business.Concrete;
 using Core.DataAccess;
 using Core.DataAccess.EntityFramework;
+using Core.Utilities.Helpers;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IKasaTipiDal, EfKasaTipiDal>();
 builder.Services.AddScoped<ICekisTipiDal, EfCekisTipiDal>();
 builder.Services.AddScoped<IYakitTipiDal, EfYakitTipiDal>();
 builder.Services.AddScoped<IVitesTipiDal, EfVitesTipiDal>();
+builder.Services.AddScoped<IAracResimDal, EfAracResimDal>();
 builder.Services.AddScoped<IAracService, AracManager>();
 builder.Services.AddScoped<IAracIlanService, AracIlanManager>();
 builder.Services.AddScoped<IOzellikService<Renk>, RenkService>();
@@ -42,6 +44,8 @@ builder.Services.AddScoped<IOzellikService<YakitTipi>, YakitTipiService>();
 builder.Services.AddScoped<IOzellikService<CekisTipi>, CekisTipiService>();
 builder.Services.AddScoped<IKategoriService, KategoriManager>();
 builder.Services.AddScoped<IMarkaService, MarkaManager>();
+builder.Services.AddScoped<IAracResimService, AracResimManager>();
+builder.Services.AddSingleton<IFileHelper, FileHelperManager>();
 
 TokenOptions tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
