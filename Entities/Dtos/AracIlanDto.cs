@@ -10,5 +10,6 @@ namespace Entities.Dtos
     {
         public IlanDto Ilan { get; set; }
         public AracDto Arac { get; set; }
+        public List<string?> Resimler { get; set; }
     }
 }

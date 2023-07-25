@@ -40,6 +40,8 @@ namespace DataAccess.Concrete.EntityFramework
                              on arac.CekisTipiId equals cekisTipi.Id
                              join kasaTipi in context.Set<KasaTipi>()
                              on arac.KasaTipiId equals kasaTipi.Id
+                             join resim in context.Set<AracResim>()
+                             on arac.Id equals resim.AracId into resimler
                              where ilan.IsActive == true
                              select new AracIlanDto
                              {
@@ -71,7 +73,8 @@ namespace DataAccess.Concrete.EntityFramework
                                      KasaTipi = kasaTipi.Name,
                                      Sifir = arac.Sifir,
                                      Fiyat = arac.Fiyat
-                                 }
+                                 },
+                                 Resimler = resimler.Select(x=>x.ImagePath).ToList()
                              };
                 return await result.ToListAsync();
             }
@@ -100,6 +103,8 @@ namespace DataAccess.Concrete.EntityFramework
                              on arac.CekisTipiId equals cekisTipi.Id
                              join kasaTipi in context.Set<KasaTipi>()
                              on arac.KasaTipiId equals kasaTipi.Id
+                             join resim in context.Set<AracResim>()
+                             on arac.Id equals resim.AracId into resimler
                              where ilan.Id == id && ilan.IsActive == true
                              select new AracIlanDto
                              {
@@ -131,7 +136,8 @@ namespace DataAccess.Concrete.EntityFramework
                                      KasaTipi = kasaTipi.Name,
                                      Sifir = arac.Sifir,
                                      Fiyat = arac.Fiyat
-                                 }
+                                 },
+                                 Resimler = resimler.Select(x=>x.ImagePath).ToList()
                              }).FirstOrDefaultAsync();
                 return result;
             }
