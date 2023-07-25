@@ -37,12 +37,12 @@ namespace Business.Concrete
             }
             AracResim newResim;
             string[] supportedTypes = { ".png", ".jpg", ".jpeg", ".webp" };
+            if (fileCollection.Any(file => file == null || !supportedTypes.Contains(Path.GetExtension(file.FileName))))
+            {
+                return new ErrorResult("Lütfen desteklenen resim dosyalarını yükleyiniz. (png, jpg, webp)");
+            }
             foreach (IFormFile file in fileCollection)
             {
-                if (supportedTypes.Contains(Path.GetExtension(file.FileName)))
-                {
-                    return new ErrorResult("Lütfen desteklenen resim dosyalarını yükleyiniz. (png, jpg, webp)");
-                }
                 string? fileName = await _fileHelper.Upload(file, PathConstants.ImagePaths);
                 if (fileName != null)
                 {
