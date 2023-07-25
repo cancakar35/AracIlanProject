@@ -37,9 +37,13 @@ namespace Business.Concrete
                     var aracResult = await _aracService.Add(arac);
                     if (!aracResult.Success)
                     {
-                        throw new Exception();
+                        return new ErrorResult(aracResult.Message == null ? Messages.IlanEklemeBasarisiz : aracResult.Message);
                     }
-                    await _aracResimService.Add(fileCollection, aracResult.Data.Id);
+                    var resimResult = await _aracResimService.Add(fileCollection, aracResult.Data.Id);
+                    if (!resimResult.Success)
+                    {
+                        return new ErrorResult(resimResult.Message == null ? Messages.IlanEklemeBasarisiz : resimResult.Message);
+                    }
                     Ilan newIlan = new Ilan
                     {
                         UserId = userId,
@@ -56,7 +60,6 @@ namespace Business.Concrete
                     scope.Complete();
                 }
                 catch {
-                    scope.Dispose();
                     return new ErrorResult(Messages.IlanEklemeBasarisiz);
                 }
             }

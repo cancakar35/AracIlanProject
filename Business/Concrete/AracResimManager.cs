@@ -36,8 +36,13 @@ namespace Business.Concrete
                 return new ErrorResult("5'ten fazla resim yüklenemez.");
             }
             AracResim newResim;
+            string[] supportedTypes = { ".png", ".jpg", ".jpeg", ".webp" };
             foreach (IFormFile file in fileCollection)
             {
+                if (supportedTypes.Contains(Path.GetExtension(file.FileName)))
+                {
+                    return new ErrorResult("Lütfen desteklenen resim dosyalarını yükleyiniz. (png, jpg, webp)");
+                }
                 string? fileName = await _fileHelper.Upload(file, PathConstants.ImagePaths);
                 if (fileName != null)
                 {
