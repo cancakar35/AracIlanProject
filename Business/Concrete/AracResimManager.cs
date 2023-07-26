@@ -97,6 +97,11 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<AracResim>("Resim bulunamadı!");
             }
+            string[] supportedTypes = { ".png", ".jpg", ".jpeg", ".webp" };
+            if (file == null || !supportedTypes.Contains(Path.GetExtension(file.FileName)))
+            {
+                return new ErrorResult("Lütfen desteklenen bir resim dosyası yükleyiniz. (png, jpg, webp)");
+            }
             string? filePath = await _fileHelper.Update(file, aracResim.ImagePath, PathConstants.ImagePaths);
             if (filePath == null)
             {
