@@ -20,7 +20,7 @@ namespace DataAccess.Concrete.EntityFramework
             using (AracContext context = new AracContext())
             {
 
-                IQueryable<Ilan> ilanlar = expr==null ? context.Set<Ilan>() : context.Set<Ilan>().Where(expr.Compile()).AsQueryable();
+                IQueryable<Ilan> ilanlar = expr==null ? context.Set<Ilan>() : context.Set<Ilan>().Where(expr).AsQueryable();
                 IQueryable<AracIlanDto> result = from ilan in ilanlar
                              join user in context.Set<User>()
                              on ilan.UserId equals user.Id

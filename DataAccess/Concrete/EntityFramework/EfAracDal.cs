@@ -18,7 +18,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (AracContext context = new AracContext())
             {
-                IQueryable<Arac> araclar = expr == null ? context.Set<Arac>() : context.Set<Arac>().Where(expr.Compile()).AsQueryable();
+                IQueryable<Arac> araclar = expr == null ? context.Set<Arac>() : context.Set<Arac>().Where(expr).AsQueryable();
                 var result = from arac in araclar
                              join kategori in context.Set<Kategori>()
                              on arac.KategoriId equals kategori.Id
