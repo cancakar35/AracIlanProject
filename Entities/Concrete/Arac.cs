@@ -18,7 +18,7 @@ namespace Entities.Concrete
         public int RenkId { get; set; }
         public Int16? MotorGucuHP { get; set; }
         public int? MotorHacmiCC { get; set; }
-        public int KiloMetre { get; set; }
+        public int Kilometre { get; set; }
         public int? VitesTipiId { get; set; }
         public int? YakitTipiId { get; set; }
         public int? CekisTipiId { get; set; }
