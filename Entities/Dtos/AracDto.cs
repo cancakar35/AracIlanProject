@@ -17,7 +17,7 @@ namespace Entities.Dtos
         public string Renk { get; set; }
         public Int16? MotorGucuHP { get; set; }
         public int? MotorHacmiCC { get; set; }
-        public int KiloMetre { get; set; }
+        public int Kilometre { get; set; }
         public string? VitesTipi { get; set; }
         public string? YakitTipi { get; set; }
         public string? CekisTipi { get; set; }
