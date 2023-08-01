@@ -8,6 +8,7 @@ using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,6 +54,10 @@ namespace Business.Concrete
 
         public async Task<IDataResult<User>> Register(UserRegisterDto userRegisterDto)
         {
+            if(!MailAddress.TryCreate(userRegisterDto.Email, out _))
+            {
+                return new ErrorDataResult<User>("Lütfen geçerli bir email adresi girin.");
+            }
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(userRegisterDto.Password, out passwordHash, out passwordSalt);
             User user = new User

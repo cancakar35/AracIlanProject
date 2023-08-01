@@ -44,7 +44,7 @@ namespace AracIlanProject.Controllers
             var registerResult = await _authService.Register(userRegisterDto);
             if (!registerResult.Success)
             {
-                return BadRequest("Kayıt başarısız!");
+                return BadRequest(registerResult.Message);
             }
             var result = await _authService.CreateAccessToken(registerResult.Data);
             if (result.Success)
