@@ -28,8 +28,8 @@ namespace AracIlanProject.Controllers
             return BadRequest(result.Message);
         }
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute]int id)
         {
             var result = await _aracService.GetAracDetailById(id);
             if (result.Success)

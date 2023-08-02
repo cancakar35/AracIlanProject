@@ -35,8 +35,8 @@ namespace AracIlanProject.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
             var result = await _ilanService.GetIlanDetailById(id);
             if (result.Success)
@@ -84,7 +84,7 @@ namespace AracIlanProject.Controllers
         }
 
         [HttpPost("remove")]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> Remove([FromBody] int id)
         {
             int userId;
             if (int.TryParse(User.Claims.First(i => i.Type == "UserId").Value, out userId) == false)
