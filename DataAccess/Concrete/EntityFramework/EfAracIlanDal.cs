@@ -15,16 +15,17 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfAracIlanDal : EfEntityRepositoryBase<Ilan, AracContext>, IAracIlanDal
     {
-        public async Task<List<AracIlanDto>> GetAllIlanDetails(Expression<Func<Ilan,bool>>? expr=null)
+        public async Task<List<AracIlanDto>> GetAllIlanDetails(Expression<Func<Ilan,bool>>? expr=null, Expression<Func<Arac, bool>>? exprArac = null)
         {
             using (AracContext context = new AracContext())
             {
 
                 IQueryable<Ilan> ilanlar = expr==null ? context.Set<Ilan>() : context.Set<Ilan>().Where(expr).AsQueryable();
+                IQueryable<Arac> araclar = exprArac==null ? context.Set<Arac>() : context.Set<Arac>().Where(exprArac).AsQueryable();
                 IQueryable<AracIlanDto> result = from ilan in ilanlar
                              join user in context.Set<User>()
                              on ilan.UserId equals user.Id
-                             join arac in context.Set<Arac>()
+                             join arac in araclar
                              on ilan.AracId equals arac.Id
                              join kategori in context.Set<Kategori>()
                              on arac.KategoriId equals kategori.Id

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace Business.Abstract
         Task<IResult> Update(int id, AddIlanDto addIlanDto, int userId);
         Task<IResult> Remove(int id, int userId);
         Task<IDataResult<AracIlanDto>> GetIlanDetailById(int id);
-        Task<IDataResult<List<AracIlanDto>>> GetAllIlanDetails();
+        Task<IDataResult<List<AracIlanDto>>> GetAllIlanDetails(Expression<Func<Arac, bool>>? expr = null);
+        Task<IDataResult<List<AracIlanDto>>> GetAllIlanByKategoriId(int kategoriId);
     }
 }

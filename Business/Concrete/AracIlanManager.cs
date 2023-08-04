@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -66,9 +67,9 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public async Task<IDataResult<List<AracIlanDto>>> GetAllIlanDetails()
+        public async Task<IDataResult<List<AracIlanDto>>> GetAllIlanDetails(Expression<Func<Arac,bool>>? expr=null)
         {
-            return new SuccessDataResult<List<AracIlanDto>>(await _aracIlanDal.GetAllIlanDetails());
+            return new SuccessDataResult<List<AracIlanDto>>(await _aracIlanDal.GetAllIlanDetails(exprArac:expr));
         }
 
         public async Task<IDataResult<AracIlanDto>> GetIlanDetailById(int id)
@@ -86,6 +87,11 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<AracIlanDto>("Hata oluştu");
             }
+        }
+
+        public async Task<IDataResult<List<AracIlanDto>>> GetAllIlanByKategoriId(int kategoriId)
+        {
+            return new SuccessDataResult<List<AracIlanDto>>(await _aracIlanDal.GetAllIlanDetails(exprArac: arac => arac.KategoriId == kategoriId));
         }
 
         public async Task<IResult> Remove(int id, int userId)
