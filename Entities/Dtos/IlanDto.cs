@@ -9,6 +9,7 @@ namespace Entities.Dtos
 {
     public class IlanDto : IDto
     {
+        public int Id { get; set; }
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string TelefonNo { get; set; }

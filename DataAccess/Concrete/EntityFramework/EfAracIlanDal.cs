@@ -48,6 +48,7 @@ namespace DataAccess.Concrete.EntityFramework
                              {
                                  Ilan = new IlanDto
                                  {
+                                     Id = ilan.Id,
                                      Ad = user.FirstName,
                                      Soyad = user.LastName,
                                      Aciklama = ilan.Aciklama,
@@ -111,6 +112,7 @@ namespace DataAccess.Concrete.EntityFramework
                              {
                                  Ilan = new IlanDto
                                  {
+                                     Id = ilan.Id,
                                      Ad = user.FirstName,
                                      Soyad = user.LastName,
                                      Aciklama = ilan.Aciklama,
