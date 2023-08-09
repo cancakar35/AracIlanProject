@@ -5,7 +5,9 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,19 +20,26 @@ namespace Business.Concrete
 {
     public class AracIlanManager : IAracIlanService
     {
-        private IAracIlanDal _aracIlanDal;
-        private IAracService _aracService;
-        private IAracResimService _aracResimService;
+        private readonly IAracIlanDal _aracIlanDal;
+        private readonly IAracService _aracService;
+        private readonly IAracResimService _aracResimService;
+        private readonly IValidator<AddIlanDto> _addIlanValidator;
 
         public AracIlanManager(IAracIlanDal aracIlanDal, IAracService aracService,
-            IAracResimService aracResimService)
+            IAracResimService aracResimService, IValidator<AddIlanDto> addIlanValidator)
         {
             _aracIlanDal = aracIlanDal;
             _aracService = aracService;
             _aracResimService = aracResimService;
+            _addIlanValidator = addIlanValidator;
         }
         public async Task<IResult> Add(AddIlanDto addIlanDto, Arac arac, IFormFileCollection fileCollection, int userId)
         {
+            var addIlanValidationResult = await _addIlanValidator.ValidateAsync(addIlanDto);
+            if (!addIlanValidationResult.IsValid)
+            {
+                return new ErrorResult(JsonConvert.SerializeObject(addIlanValidationResult.Errors));
+            }
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
