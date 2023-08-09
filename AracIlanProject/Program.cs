@@ -1,13 +1,17 @@
 using Business.Abstract;
 using Business.Concrete;
+using Business.ValidationRules.FluentValidation;
 using Core.DataAccess;
 using Core.DataAccess.EntityFramework;
+using Core.Entities.Concrete;
 using Core.Utilities.Helpers;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.Dtos;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -46,6 +50,9 @@ builder.Services.AddScoped<IKategoriService, KategoriManager>();
 builder.Services.AddScoped<IMarkaService, MarkaManager>();
 builder.Services.AddScoped<IAracResimService, AracResimManager>();
 builder.Services.AddSingleton<IFileHelper, FileHelperManager>();
+builder.Services.AddSingleton<IValidator<User>, UserValidator>();
+builder.Services.AddSingleton<IValidator<UserRegisterDto>, UserRegisterValidation>();
+builder.Services.AddSingleton<IValidator<AddIlanDto>, AddIlanValidation>();
 
 TokenOptions tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
