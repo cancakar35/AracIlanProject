@@ -20,5 +20,6 @@ namespace Business.Abstract
         Task<IDataResult<AracIlanDto>> GetIlanDetailById(int id);
         Task<IDataResult<List<AracIlanDto>>> GetAllIlanDetails(Expression<Func<Arac, bool>>? expr = null);
         Task<IDataResult<List<AracIlanDto>>> GetAllIlanByKategoriId(int kategoriId);
+        Task<IDataResult<List<AracIlanDto>>> GetUserIlanDetails(int userId);
     }
 }

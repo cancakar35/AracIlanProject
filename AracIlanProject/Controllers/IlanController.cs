@@ -79,6 +79,22 @@ namespace AracIlanProject.Controllers
             return BadRequest(result.Message);
         }
 
+        [HttpGet("getuserilanlist")]
+        public async Task<IActionResult> GetCurrentUserIlanList()
+        {
+            int userId;
+            if (int.TryParse(User.Claims.First(i => i.Type == "UserId").Value, out userId) == false)
+            {
+                return StatusCode(403);
+            }
+            var result = await _ilanService.GetUserIlanDetails(userId);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromForm] AddIlanDto addIlanDto, [FromForm] Arac arac, [FromForm] IFormFileCollection files)
         {
