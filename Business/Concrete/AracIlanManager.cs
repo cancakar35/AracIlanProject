@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -58,7 +59,7 @@ namespace Business.Concrete
                     {
                         UserId = userId,
                         AracId = arac.Id,
-                        TelefonNo = addIlanDto.TelefonNo,
+                        TelefonNo = formatPhoneNumber(addIlanDto.TelefonNo),
                         Aciklama = addIlanDto.Aciklama,
                         Tarih = DateTime.Now,
                         Il = addIlanDto.Il,
@@ -130,13 +131,23 @@ namespace Business.Concrete
             {
                 return new ErrorResult("Bu işlem için yetkiniz yok!");
             }
-            ilan.TelefonNo = addIlanDto.TelefonNo;
+            var addIlanValidationResult = await _addIlanValidator.ValidateAsync(addIlanDto);
+            if (!addIlanValidationResult.IsValid)
+            {
+                return new ErrorResult(JsonConvert.SerializeObject(addIlanValidationResult.Errors));
+            }
+            ilan.TelefonNo = formatPhoneNumber(addIlanDto.TelefonNo);
             ilan.Aciklama = addIlanDto.Aciklama;
             ilan.Il = addIlanDto.Il;
             ilan.Ilce = addIlanDto.Ilce;
             ilan.Mahalle = addIlanDto.Mahalle;
             await _aracIlanDal.Update(ilan);
             return new SuccessResult();
+        }
+
+        private string formatPhoneNumber(string phoneNumber)
+        {
+            return "+90" + Regex.Replace(phoneNumber, @"^(((\+)?(90)|0)[-|\s]?)?((\d{3})[-|\s]?(\d{3})[-|\s]?(\d{2})[-|\s]?(\d{2}))$", @"$5");
         }
     }
 }
