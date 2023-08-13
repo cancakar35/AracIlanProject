@@ -66,6 +66,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidIssuer = tokenOptions.Issuer,
         ValidAudience = tokenOptions.Audience,
         IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey),
+        ClockSkew = TimeSpan.Zero,
+        LifetimeValidator = (DateTime? notBefore, DateTime? expires,
+            SecurityToken securityToken,
+            TokenValidationParameters validationParameters) => expires != null ? expires > DateTime.Now : false,
     };
 });
 
