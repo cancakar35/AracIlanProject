@@ -36,6 +36,18 @@ namespace AracIlanProject.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string search)
+        {
+            var result = await _ilanService.GetSearchIlanDetails(search);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [AllowAnonymous]
         [HttpGet("filtre")]
         public async Task<IActionResult> GetAllFilter([FromQuery] List<int>? kategori, [FromQuery] List<int>? markaId, [FromQuery] List<int>? renkId, [FromQuery] List<int?>? vitesTipiId,
             [FromQuery] List<int?>? yakitTipiId, [FromQuery] List<int?>? kasaTipiId, [FromQuery] List<int?>? cekisTipiId)

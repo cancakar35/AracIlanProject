@@ -87,6 +87,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<AracIlanDto>>(await _aracIlanDal.GetAllIlanDetails(expr:ilan=>ilan.UserId == userId));
         }
 
+        public async Task<IDataResult<List<AracIlanDto>>> GetSearchIlanDetails(string search)
+        {
+            return new SuccessDataResult<List<AracIlanDto>>(await _aracIlanDal.GetSearchIlanDetails(search));
+        }
+
         public async Task<IDataResult<AracIlanDto>> GetIlanDetailById(int id)
         {
             try

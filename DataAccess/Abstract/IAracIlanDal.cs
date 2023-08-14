@@ -13,6 +13,7 @@ namespace DataAccess.Abstract
     public interface IAracIlanDal : IEntityRepository<Ilan>
     {
         Task<AracIlanDto?> GetIlanDetailById(int id);
+        Task<List<AracIlanDto>> GetSearchIlanDetails(string search);
         Task<List<AracIlanDto>> GetAllIlanDetails(Expression<Func<Ilan, bool>>? expr = null, Expression<Func<Arac, bool>>? exprArac = null);
     }
 }
