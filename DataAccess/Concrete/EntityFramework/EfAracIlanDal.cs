@@ -113,8 +113,8 @@ namespace DataAccess.Concrete.EntityFramework
                                                  ilan.Id.ToString() == search ||
                                                  (ilan.Il+ " "+ ilan.Ilce).ToLower().Contains(search) ||
                                                  marka.Name.ToLower().Contains(search) ||
-                                                 !arac.Model.IsNullOrEmpty() && arac.Model!.ToLower().Contains(search) ||
-                                                 arac.Seri.IsNullOrEmpty() && arac.Seri!.ToLower().Contains(search) ||
+                                                 arac.Model != null && arac.Model!.ToLower().Contains(search) ||
+                                                 arac.Seri != null && arac.Seri!.ToLower().Contains(search) ||
                                                  (marka.Name+ " " + arac.Model ?? "" + " " + arac.Seri ?? "").ToLower().Contains(search) ||
                                                  arac.UretimYili.ToString().Contains(search) ||
                                                  (ilan.Il + " " + ilan.Ilce + marka.Name + " " + arac.Model ?? "" + " " + arac.Seri ?? "" + " " + arac.UretimYili.ToString()).ToLower().Contains(search)
