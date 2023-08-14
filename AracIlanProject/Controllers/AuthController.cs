@@ -1,11 +1,14 @@
 ﻿using Business.Abstract;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Jwt;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AracIlanProject.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -17,6 +20,7 @@ namespace AracIlanProject.Controllers
             _authService = authService;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {
@@ -33,6 +37,7 @@ namespace AracIlanProject.Controllers
             return BadRequest(result.Message);
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
         {
@@ -52,6 +57,18 @@ namespace AracIlanProject.Controllers
                 return Ok(result.Data);
             }
             return BadRequest(result.Message);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken(Tokens tokens)
+        {
+            var result = await _authService.RefreshToken(tokens);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return Unauthorized();
         }
     }
 }

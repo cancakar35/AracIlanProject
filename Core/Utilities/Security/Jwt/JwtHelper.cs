@@ -68,6 +68,35 @@ namespace Core.Utilities.Security.Jwt
             }
         }
 
+        public ClaimsPrincipal? GetClaimsFromExpiredToken(string expiredAccessToken)
+        {
+            if (!string.IsNullOrEmpty(expiredAccessToken)) return null;
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _tokenOptions.Issuer,
+                ValidAudience = _tokenOptions.Audience,
+                IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey),
+                ClockSkew = TimeSpan.Zero,
+                LifetimeValidator = (DateTime? notBefore, DateTime? expires,
+                    SecurityToken securityToken,
+                    TokenValidationParameters validationParameters) => expires != null ? expires > DateTime.Now : false,
+            };
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                SecurityToken validatedToken;
+                return handler.ValidateToken(expiredAccessToken, validationParameters, out validatedToken);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         private JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user,
             SigningCredentials signingCredentials, List<OperationClaim> operationClaims,
             DateTime expires, DateTime notBefore)

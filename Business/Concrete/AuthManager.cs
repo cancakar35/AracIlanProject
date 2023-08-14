@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,6 +33,38 @@ namespace Business.Concrete
         }
         public async Task<IDataResult<Tokens>> CreateAccessToken(User user)
         {
+            try
+            {
+                var claims = await _userService.GetClaims(user);
+                return new SuccessDataResult<Tokens>(_tokenHelper.CreateToken(user, claims));
+            }
+            catch
+            {
+                return new ErrorDataResult<Tokens>();
+            }
+        }
+
+        public async Task<IDataResult<Tokens>> RefreshToken(Tokens tokens)
+        {
+            if (!_tokenHelper.ValidateRefreshToken(tokens.RefreshToken))
+            {
+                return new ErrorDataResult<Tokens>("Yetkiniz yok!");
+            }
+            ClaimsPrincipal? claimsPrincipal = _tokenHelper.GetClaimsFromExpiredToken(tokens.AccessToken);
+            if (claimsPrincipal == null)
+            {
+                return new ErrorDataResult<Tokens>("Yetkiniz yok!");
+            }
+            int userId;
+            if (int.TryParse(claimsPrincipal.Claims.First(i => i.Type == "UserId").Value, out userId) == false)
+            {
+                return new ErrorDataResult<Tokens>();
+            }
+            User? user = await _userService.GetById(userId);
+            if (user == null)
+            {
+                return new ErrorDataResult<Tokens>();
+            }
             try
             {
                 var claims = await _userService.GetClaims(user);

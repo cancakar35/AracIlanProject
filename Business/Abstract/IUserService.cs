@@ -12,6 +12,7 @@ namespace Business.Abstract
         Task Add(User user);
         Task Update(User user);
         Task Delete(User user);
+        Task<User?> GetById(int id);
         Task<User?> GetByMail(string mail);
         Task<List<OperationClaim>> GetClaims(User user);
     }

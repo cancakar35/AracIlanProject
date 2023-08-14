@@ -28,6 +28,11 @@ namespace Business.Concrete
             await _userDal.Delete(user);
         }
 
+        public async Task<User?> GetById(int id)
+        {
+            return await _userDal.Get(u => u.Id == id);
+        }
+
         public async Task<User?> GetByMail(string mail)
         {
             return await _userDal.Get(u => u.Email == mail);
