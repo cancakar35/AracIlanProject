@@ -20,27 +20,63 @@ namespace Core.Utilities.Security.Jwt
             Configuration = configuration;
             _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
         }
-        public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
+        public Tokens CreateToken(User user, List<OperationClaim> operationClaims)
         {
             var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
             var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
-            var jwtSecurityToken = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims);
+            DateTime tokenTime = DateTime.UtcNow;
+            JwtSecurityToken jwtSecurityToken = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims, tokenTime.AddMinutes(_tokenOptions.AccessTokenExpiration), tokenTime);
+            JwtSecurityToken jwtRefreshToken = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims, tokenTime.AddDays(_tokenOptions.RefreshTokenExpirationDays), tokenTime);
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            string token = handler.WriteToken(jwtSecurityToken);
-            return new AccessToken
+            string accessToken = handler.WriteToken(jwtSecurityToken);
+            string refreshToken = handler.WriteToken(jwtRefreshToken);
+            return new Tokens
             {
-                Token = token
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
             };
         }
 
+        public bool ValidateRefreshToken(string refreshToken)
+        {
+            if (string.IsNullOrEmpty(refreshToken)) return false;
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _tokenOptions.Issuer,
+                ValidAudience = _tokenOptions.Audience,
+                IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey),
+                ClockSkew = TimeSpan.Zero,
+                LifetimeValidator = (DateTime? notBefore, DateTime? expires,
+                    SecurityToken securityToken,
+                    TokenValidationParameters validationParameters) => expires != null ? expires > DateTime.Now : false,
+            };
+            var handler = new JwtSecurityTokenHandler();
+
+            try
+            {
+                SecurityToken validatedToken;
+                ClaimsPrincipal claimsPrincipal = handler.ValidateToken(refreshToken, validationParameters, out validatedToken);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user,
-            SigningCredentials signingCredentials, List<OperationClaim> operationClaims)
+            SigningCredentials signingCredentials, List<OperationClaim> operationClaims,
+            DateTime expires, DateTime notBefore)
         {
             var jwtSecurityToken = new JwtSecurityToken(
                     issuer: _tokenOptions.Issuer,
                     audience: _tokenOptions.Audience,
-                    expires: DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration),
-                    notBefore:DateTime.Now,
+                    expires: expires,
+                    notBefore: notBefore,
                     claims: SetClaims(user, operationClaims),
                     signingCredentials: signingCredentials
                 );

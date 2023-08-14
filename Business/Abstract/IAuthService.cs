@@ -14,7 +14,7 @@ namespace Business.Abstract
     {
         Task<IDataResult<User>> Login(UserLoginDto userLoginDto);
         Task<IDataResult<User>> Register(UserRegisterDto userRegisterDto);
-        Task<IDataResult<AccessToken>> CreateAccessToken(User user);
+        Task<IDataResult<Tokens>> CreateAccessToken(User user);
         Task<IResult> UserExist(string email);
     }
 }

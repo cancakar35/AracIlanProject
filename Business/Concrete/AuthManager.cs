@@ -30,16 +30,16 @@ namespace Business.Concrete
             _userValidator = userValidator;
             _userRegisterValidator = userRegisterValidator;
         }
-        public async Task<IDataResult<AccessToken>> CreateAccessToken(User user)
+        public async Task<IDataResult<Tokens>> CreateAccessToken(User user)
         {
             try
             {
                 var claims = await _userService.GetClaims(user);
-                return new SuccessDataResult<AccessToken>(_tokenHelper.CreateToken(user, claims));
+                return new SuccessDataResult<Tokens>(_tokenHelper.CreateToken(user, claims));
             }
             catch
             {
-                return new ErrorDataResult<AccessToken>();
+                return new ErrorDataResult<Tokens>();
             }
         }
 
