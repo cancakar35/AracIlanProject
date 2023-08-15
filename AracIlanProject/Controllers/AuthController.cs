@@ -68,7 +68,7 @@ namespace AracIlanProject.Controllers
             {
                 return Ok(result.Data);
             }
-            return Unauthorized();
+            return Unauthorized(result.Message);
         }
     }
 }

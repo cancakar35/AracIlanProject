@@ -69,7 +69,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ClockSkew = TimeSpan.Zero,
         LifetimeValidator = (DateTime? notBefore, DateTime? expires,
             SecurityToken securityToken,
-            TokenValidationParameters validationParameters) => expires != null ? expires > DateTime.Now : false,
+            TokenValidationParameters validationParameters) => expires != null ? expires > DateTime.UtcNow : false,
     };
 });
 
