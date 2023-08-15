@@ -1,8 +1,6 @@
 using Business.Abstract;
 using Business.Concrete;
 using Business.ValidationRules.FluentValidation;
-using Core.DataAccess;
-using Core.DataAccess.EntityFramework;
 using Core.Entities.Concrete;
 using Core.Utilities.Helpers;
 using Core.Utilities.Security.Encryption;
@@ -83,7 +81,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(builder=> builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
+app.UseCors(builder=> builder.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyHeader().AllowCredentials());
 
 app.UseHttpsRedirection();
 

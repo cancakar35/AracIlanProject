@@ -39,7 +39,7 @@ namespace AracIlanProject.Controllers
                     SameSite = SameSiteMode.Strict,
                     Expires = result.Data.RefreshToken.Expiration
                 };
-                Response.Cookies.Append("refreshToken", result.Data.RefreshToken.Token, refreshCookieOptions);
+                Response.Cookies.Append("X-Refresh-Token", result.Data.RefreshToken.Token, refreshCookieOptions);
                 return Ok(result.Data.AccessToken);
             }
             return BadRequest(result.Message);
@@ -69,7 +69,7 @@ namespace AracIlanProject.Controllers
                     SameSite = SameSiteMode.Strict,
                     Expires = result.Data.RefreshToken.Expiration
                 };
-                Response.Cookies.Append("refreshToken", result.Data.RefreshToken.Token, refreshCookieOptions);
+                Response.Cookies.Append("X-Refresh-Token", result.Data.RefreshToken.Token, refreshCookieOptions);
                 return Ok(result.Data.AccessToken);
             }
             return BadRequest(result.Message);
@@ -80,7 +80,7 @@ namespace AracIlanProject.Controllers
         public async Task<IActionResult> RefreshToken(AccessToken accessToken)
         {
             string? refreshToken;
-            if (!Request.Cookies.TryGetValue("refreshToken", out refreshToken))
+            if (!Request.Cookies.TryGetValue("X-Refresh-Token", out refreshToken))
             {
                 return BadRequest();
             }
@@ -97,7 +97,7 @@ namespace AracIlanProject.Controllers
                 SameSite = SameSiteMode.Strict,
                 Expires = result.Data.RefreshToken.Expiration
             };
-            Response.Cookies.Append("refreshToken", result.Data.RefreshToken.Token, refreshCookieOptions);
+            Response.Cookies.Append("X-Refresh-Token", result.Data.RefreshToken.Token, refreshCookieOptions);
             return Ok(result.Data.AccessToken);
         }
     }
