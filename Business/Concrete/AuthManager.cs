@@ -44,13 +44,13 @@ namespace Business.Concrete
             }
         }
 
-        public async Task<IDataResult<Tokens>> RefreshToken(Tokens tokens)
+        public async Task<IDataResult<Tokens>> RefreshToken(string accessToken, string refreshToken)
         {
-            if (!_tokenHelper.ValidateRefreshToken(tokens.RefreshToken))
+            if (!_tokenHelper.ValidateRefreshToken(refreshToken))
             {
                 return new ErrorDataResult<Tokens>("Yetkiniz yok!");
             }
-            ClaimsPrincipal? claimsPrincipal = _tokenHelper.GetClaimsFromExpiredToken(tokens.AccessToken);
+            ClaimsPrincipal? claimsPrincipal = _tokenHelper.GetClaimsFromExpiredToken(accessToken);
             if (claimsPrincipal == null)
             {
                 return new ErrorDataResult<Tokens>("Yetkiniz yok!");

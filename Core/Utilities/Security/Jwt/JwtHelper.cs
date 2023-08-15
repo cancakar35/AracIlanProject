@@ -34,8 +34,8 @@ namespace Core.Utilities.Security.Jwt
             string refreshToken = handler.WriteToken(jwtRefreshToken);
             return new Tokens
             {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
+                AccessToken = new AccessToken { Token = accessToken },
+                RefreshToken = new RefreshToken { Token = refreshToken, Expiration=tokenTime.AddDays(_tokenOptions.RefreshTokenExpirationDays) }
             };
         }
 

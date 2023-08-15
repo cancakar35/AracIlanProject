@@ -13,6 +13,7 @@ using Entities.Concrete;
 using Entities.Dtos;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -91,6 +92,13 @@ app.UseStaticFiles();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always,
+    MinimumSameSitePolicy = SameSiteMode.Strict
+});
 
 app.MapControllers();
 

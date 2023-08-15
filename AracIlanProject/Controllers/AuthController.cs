@@ -32,7 +32,15 @@ namespace AracIlanProject.Controllers
             var result = await _authService.CreateAccessToken(userToLogin.Data);
             if (result.Success)
             {
-                return Ok(result.Data);
+                var refreshCookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = result.Data.RefreshToken.Expiration
+                };
+                Response.Cookies.Append("refreshToken", result.Data.RefreshToken.Token, refreshCookieOptions);
+                return Ok(result.Data.AccessToken);
             }
             return BadRequest(result.Message);
         }
@@ -54,21 +62,43 @@ namespace AracIlanProject.Controllers
             var result = await _authService.CreateAccessToken(registerResult.Data);
             if (result.Success)
             {
-                return Ok(result.Data);
+                var refreshCookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = result.Data.RefreshToken.Expiration
+                };
+                Response.Cookies.Append("refreshToken", result.Data.RefreshToken.Token, refreshCookieOptions);
+                return Ok(result.Data.AccessToken);
             }
             return BadRequest(result.Message);
         }
 
         [AllowAnonymous]
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken(Tokens tokens)
+        public async Task<IActionResult> RefreshToken(AccessToken accessToken)
         {
-            var result = await _authService.RefreshToken(tokens);
-            if (result.Success)
+            string? refreshToken;
+            if (!Request.Cookies.TryGetValue("refreshToken", out refreshToken))
             {
-                return Ok(result.Data);
+                return BadRequest();
             }
-            return Unauthorized(result.Message);
+            if (refreshToken == null) return BadRequest();
+            var result = await _authService.RefreshToken(accessToken.Token, refreshToken);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            var refreshCookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = result.Data.RefreshToken.Expiration
+            };
+            Response.Cookies.Append("refreshToken", result.Data.RefreshToken.Token, refreshCookieOptions);
+            return Ok(result.Data.AccessToken);
         }
     }
 }
