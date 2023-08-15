@@ -24,9 +24,11 @@ namespace Core.Utilities.Security.Jwt
         {
             var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
             var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
+            var refreshSecurityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.RefreshSecurityKey);
+            var refreshSigningCredentials = SigningCredentialsHelper.CreateSigningCredentials(refreshSecurityKey);
             DateTime tokenTime = DateTime.UtcNow;
             JwtSecurityToken jwtSecurityToken = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims, tokenTime.AddMinutes(_tokenOptions.AccessTokenExpiration), tokenTime);
-            JwtSecurityToken jwtRefreshToken = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims, tokenTime.AddDays(_tokenOptions.RefreshTokenExpirationDays), tokenTime);
+            JwtSecurityToken jwtRefreshToken = CreateJwtSecurityToken(_tokenOptions, user, refreshSigningCredentials, operationClaims, tokenTime.AddDays(_tokenOptions.RefreshTokenExpirationDays), tokenTime);
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             string accessToken = handler.WriteToken(jwtSecurityToken);
             string refreshToken = handler.WriteToken(jwtRefreshToken);
@@ -48,7 +50,7 @@ namespace Core.Utilities.Security.Jwt
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = _tokenOptions.Issuer,
                 ValidAudience = _tokenOptions.Audience,
-                IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey),
+                IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.RefreshSecurityKey),
                 ClockSkew = TimeSpan.Zero,
                 LifetimeValidator = (DateTime? notBefore, DateTime? expires,
                     SecurityToken securityToken,

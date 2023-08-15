@@ -6,6 +6,7 @@ namespace Core.Utilities.Security.Jwt
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public string SecurityKey { get; set; }
+        public string RefreshSecurityKey { get; set; }
         public int AccessTokenExpiration { get; set; }
         public int RefreshTokenExpirationDays { get; set; }
     }
